@@ -76,7 +76,7 @@ def main():
             fetches=rnn.sz_pred
             sz_pred=sess.run(fetches=fetches,feed_dict=feed)
             return sz_pred
-        print "测试结果："
+        print("测试结果：")
         predictions_test=[]
         groundtruth_test=[]
         for batch in tl.iterate.minibatches(test_lex, test_z, batch_size=s['batch_size']):
@@ -88,11 +88,8 @@ def main():
 
         res_test = tools.conlleval(predictions_test, groundtruth_test, '')
 
-        print res_test
+        print(res_test)
 
 if __name__ == '__main__':
     main()
-
-
-
-
+    

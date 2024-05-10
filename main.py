@@ -42,14 +42,14 @@ def main():
     train_lex, train_y, train_z = train_lex[:tr], train_y[:tr], train_z[:tr]
     test_lex,  test_y, test_z  = test_set
 
-    print 'len(train_data) {}'.format(len(train_lex))
-    print 'len(valid_data) {}'.format(len(valid_lex))
-    print 'len(test_data) {}'.format(len(test_lex))
+    print ('len(train_data) {}'.format(len(train_lex)))
+    print ('len(valid_data) {}'.format(len(valid_lex)))
+    print ('len(test_data) {}'.format(len(test_lex)))
 
     vocab = set(dic['words2idx'].keys())
     vocsize = len(vocab)
-    print 'len(vocab) {}'.format(vocsize)
-    print "Train started!"
+    print ('len(vocab) {}'.format(vocsize))
+    print ("Train started!")
 
     y_nclasses = 2
     z_nclasses = 5
@@ -109,7 +109,7 @@ def main():
         test_best_e=0
         best_res=None
         test_best_res=None
-        for e in xrange(s['nepochs']):
+        for e in range(s['nepochs']):
             tools.shuffle([train_lex,train_y,train_z],s['seed'])
             t_start=time.time()
             for step,batch in enumerate(tl.iterate.minibatches(train_lex,zip(train_y,train_z),batch_size=s['batch_size'])):
@@ -121,7 +121,7 @@ def main():
                 cwords=tools.contextwin_2(input_x,s['win'])
                 loss=train_step(cwords,label_y,label_z)
 
-                print 'loss %.2f' % loss,' [learning] epoch %i>> %2.2f%%' % (e,s['batch_size']*step*100./nsentences),'completed in %.2f (sec) <<\r' % (time.time()-t_start),
+                print ('loss %.2f' % loss,' [learning] epoch %i>> %2.2f%%' % (e,s['batch_size']*step*100./nsentences),'completed in %.2f (sec) <<\r' % (time.time()-t_start),)
 
                 sys.stdout.flush()
 
@@ -144,11 +144,11 @@ def main():
                 best_f=res_valid['f']
                 best_e=e
                 best_res=res_valid
-                print '\nVALID new best:',res_valid
+                print ('\nVALID new best:',res_valid)
                 path = saver.save(sess=sess, save_path=checkpoint_prefix, global_step=e)
-                print "Save model checkpoint to {}".format(path)
+                print ("Save model checkpoint to {}".format(path))
             else:
-                print '\nVALID new curr:',res_valid
+                print ('\nVALID new curr:',res_valid)
 
             #TEST
             if e%s['display_test_per']==0:
@@ -166,21 +166,21 @@ def main():
                     test_best_f = res_test['f']
                     test_best_e=e
                     test_best_res=res_test
-                    print 'TEST new best:',res_test
+                    print ('TEST new best:',res_test)
                 else:
-                    print 'TEST new curr:',res_test
+                    print ('TEST new curr:',res_test)
 
             # learning rate decay if no improvement in 10 epochs
             if e-best_e>s['lr_decay_per']:
                 sess.run(fetches=rnn.learning_rate_decay_op)
             lr=sess.run(fetches=rnn.lr)
-            print 'learning rate:%f' % lr
+            print ('learning rate:%f' % lr)
             if lr<1e-5:break
             print
 
-        print "Train finished!"
-        print 'Valid Best Result: epoch %d:  ' % (best_e),best_res
-        print 'Test Best Result: epoch %d:  ' %(test_best_e),test_best_res
+        print ("Train finished!")
+        print ('Valid Best Result: epoch %d:  ' % (best_e),best_res)
+        print ('Test Best Result: epoch %d:  ' %(test_best_e),test_best_res)
 
 if __name__ == '__main__':
     main()

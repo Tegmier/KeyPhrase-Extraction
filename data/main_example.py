@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import cPickle
+import pickle
 def main():
     
     f = open('data_set.pkl')
-    train_set, test_set, dicts = cPickle.load(f)
-    embedding = cPickle.load(open('embedding.pkl'))
+    train_set, test_set, dicts = pickle.load(f)
+    embedding = pickle.load(open('embedding.pkl'))
   
     word2idx=dicts['words2idx']
     labels2idx=dicts['labels2idx']
@@ -17,12 +17,12 @@ def main():
     test_lex,  test_y, test_z  = test_lex[:tr],test_y[:tr],test_z[:tr]
 
 
-    print 'len(train_data) {}'.format(len(train_lex))
-    print 'len(valid_data) {}'.format(len(valid_lex))
-    print 'len(test_data) {}'.format(len(test_lex))
+    print ('len(train_data) {}'.format(len(train_lex)))
+    print ('len(valid_data) {}'.format(len(valid_lex)))
+    print ('len(test_data) {}'.format(len(test_lex)))
 
     vocab_size = len(word2idx)
-    print 'len(vocab) {}'.format(vocab_size)
-    print "Train started!"
+    print ('len(vocab) {}'.format(vocab_size))
+    print ("Train started!")
 
 main()

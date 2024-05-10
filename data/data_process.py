@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import re
-import cPickle
+import pickle
 from collections import Counter
 
 
@@ -118,7 +118,7 @@ def get_train_test_dicts(filenames):
     test_set = [test_lex, test_y, test_z]
     data_set = [train_set, test_set, dicts]
     with open('data_set.pkl', 'w') as f:
-        cPickle.dump(data_set, f)
+        pickle.dump(data_set, f)
     return data_set
 
 
@@ -134,7 +134,7 @@ def load_bin_vec(frame,vocab):
                 word_vecs[word]=np.asarray(embeding,dtype=np.float32)
             k+=1
             if k%10000==0:
-                print "load_bin_vec %d" % k
+                print ("load_bin_vec %d" % k)
 
     return word_vecs
 
@@ -149,7 +149,7 @@ def add_unknown_words(word_vecs, vocab, min_df=1, dim=300):
             word_vecs[w]=np.asarray(np.random.uniform(-0.25,0.25,dim),dtype=np.float32)
             k+=1
             if k % 10000==0:
-                print "add_unknow_words %d" % k
+                print ("add_unknow_words %d" % k)
     return word_vecs
 
 def get_embedding(w2v,words2idx,k=300):
@@ -158,28 +158,28 @@ def get_embedding(w2v,words2idx,k=300):
         embedding[idx]=w2v[w]
     #embedding[0]=np.asarray(np.random.uniform(-0.25,0.25,k),dtype=np.float32)
     with open('embedding.pkl','w') as f:
-        cPickle.dump(embedding,f)
+        pickle.dump(embedding,f)
     return embedding
 
 
 if __name__ == '__main__':
     data_folder = ["original_data/trnTweet","original_data/testTweet"]
     data_set = get_train_test_dicts(data_folder)
-    print "data_set complete!"
+    print ("data_set complete!")
     dicts = data_set[2]
     vocab = set(dicts['words2idx'].keys())
-    print "total num words: " + str(len(vocab))
-    print "dataset created!"
+    print ("total num words: " + str(len(vocab)))
+    print ("dataset created!")
     train_set, test_set, dicts=data_set
-    print len(train_set[0])
+    print (len(train_set[0]))
 
     #GoogleNews-vectors-negative300.txt为预先训练的词向量 
     w2v_file='original_data/GoogleNews-vectors-negative300.txt' 
     w2v=load_bin_vec(w2v_file,vocab)
-    print "word2vec loaded"
+    print ("word2vec loaded")
     add_unknown_words(w2v,vocab)
     embedding=get_embedding(w2v,dicts['words2idx'])
-    print "embedding created"
+    print ("embedding created")
 
 
 
